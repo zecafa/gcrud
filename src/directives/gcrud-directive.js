@@ -1,6 +1,6 @@
 angular.module('gcrud').directive('gcrudDirective', function(){
     return {
-        controller: '../controllers/gcrud-controller.js'
+        controller: 'gcrudController.js'
         restrict: 'A'
     };
 })
