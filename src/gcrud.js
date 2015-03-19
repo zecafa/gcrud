@@ -5,7 +5,6 @@ var gcrud = angular.module('gcrud',[])
  *
  * @namespace editable-options
  */
-//todo: maybe better have editableDefaults, not options...
 .value('gcrudOptions', {
 
    /**
