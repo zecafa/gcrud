@@ -1,15 +1,15 @@
 angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$filter','gcrudOptions', function(ngTableParams, $filter, gcrudOptions) {
     
     // TODO: Avoid Restangular dependency
-    var apiCall = Restangular.all($scope.gcrudParams.apiResourceName); 
-    var page = $scope.gcrudParams.page || 1;
-    var count = $scope.gcrudParams.itemsPerPage || gcrudOptions.itemsPerPage;
+    var apiCall  = Restangular.all($scope.gcrudParams.apiResourceName); 
+    var page     = $scope.gcrudParams.page || 1;
+    var count    = $scope.gcrudParams.itemsPerPage || gcrudOptions.itemsPerPage;
     var callback = $scope.gcrudParams.callback || gcrudOptions.gridCallback;
-    var sorting = $scope.gcrudParams.defaultSorting || gcrudOptions.defaultSorting;
-    var filter = $scope.gcrudParams.defaultFilter || gcrudOptions.defaultFilter;
-    var total = $scope.gcrudParams.total || 0;
-    var counts = $scope.gcrudParams.counts || [];
-    var cache = $scope.gcrudParams.cache || true;
+    var sorting  = $scope.gcrudParams.defaultSorting || gcrudOptions.defaultSorting;
+    var filter   = $scope.gcrudParams.defaultFilter || gcrudOptions.defaultFilter;
+    var total    = $scope.gcrudParams.total || 0;
+    var counts   = $scope.gcrudParams.counts || [];
+    var cache    = $scope.gcrudParams.cache || true;
 
     $scope.$watch('tableParams.data', function(data){
         if (!!data.total) {
