@@ -64,7 +64,7 @@ angular.module('gcrud').directive('gcrudDetail', function(){
 })
 ;
 
-angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll','gcrudTableParams', 'Restangular', function($scope, $element, $attrs, $transclude, $location, $anchorScroll, gcrudTableParams, Restangular){
+angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll','gcrudTableParams', function($scope, $element, $attrs, $transclude, $location, $anchorScroll, gcrudTableParams){
 
     var deselectItems = function(){
         for (var i = 0; i < $scope.gcrudTable.tableParams.data.length; i++) {
@@ -102,8 +102,6 @@ angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$at
 ;
 angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$filter','gcrudOptions', function(ngTableParams, $filter, gcrudOptions) {
     
-    // TODO: Avoid Restangular dependency
-    var apiCall  = Restangular.all($scope.gcrudParams.apiResourceName); 
     var page     = $scope.gcrudParams.page || 1;
     var count    = $scope.gcrudParams.itemsPerPage || gcrudOptions.itemsPerPage;
     var callback = $scope.gcrudParams.callback || gcrudOptions.gridCallback;
@@ -112,18 +110,7 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
     var total    = $scope.gcrudParams.total || 0;
     var counts   = $scope.gcrudParams.counts || [];
     var cache    = $scope.gcrudParams.cache || true;
-
-    $scope.$watch('tableParams.data', function(data){
-        if (!!data.total) {
-            $scope.selectItem(data[0], false);
-            delete $scope.emptyItemList;
-        } else {
-            delete $scope.selectedItem;
-            $scope.emptyItemList = true;
-        }
-    });
-
-    var getData = function($defer, params) {
+    var getData  = $scope.gcrudParams || function($defer, params) {
         var loadData = true;
         $.each(params.filter(), function(index,value) {
             if (angular.isDate(value)) {
@@ -152,6 +139,17 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
         }
     };
 
+
+    $scope.$watch('tableParams.data', function(data){
+        if (!!data.total) {
+            $scope.selectItem(data[0], false);
+            delete $scope.emptyItemList;
+        } else {
+            delete $scope.selectedItem;
+            $scope.emptyItemList = true;
+        }
+    });
+
     $scope.removeFilters = function() {
         this.tableParams.filter(angular.copy(filter));
         this.tableParams.sorting(angular.copy(sorting));
@@ -170,8 +168,8 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
         sorting: angular.copy(sorting), // initial sorting
         filter: angular.copy(filter) // initial filter
     }, {
-        // total: total, // length of data
-        total: data.length, // length of data
+        total: total, // length of data
+        // total: data.length, // length of data
         counts: counts,
         getData: this.getData
     });
