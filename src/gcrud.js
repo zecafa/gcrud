@@ -1,4 +1,4 @@
-var gcrud = angular.module('gcrud',[])
+var gcrud = angular.module('gcrud',['ngTable'])
 
 /**
  * Default options. 
@@ -37,37 +37,10 @@ var gcrud = angular.module('gcrud',[])
     gridCallback: null
 
 });
-angular.module('gcrud').directive('gcrud', function(){
-    return {
-        controller: 'gcrudController',
-        restrict: 'A'
-    };
-})
-;
-angular.module('gcrud').directive('gcrudGrid', function(){
-    return {
-        priority: 90,
-        restrict: 'E',
-        templateUrl: '../templates/gcrud-grid-template.html',
-        controller: 'gcrudGridController',
-        transclude: true
-    };
-})
-;
-angular.module('gcrud').directive('gcrudDetail', function(){
-    return {
-        transclude: true,
-        templateUrl: '../templates/gcrud-detail-template.html',
-        controller: 'gcrudDetailController',
-        restrict: 'E'
-    };
-})
-;
 
-angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll','gcrudTableParams', function($scope, $element, $attrs, $transclude, $location, $anchorScroll, gcrudTableParams){
-
+angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll', function($scope, $element, $attrs, $transclude, $location, $anchorScroll){
     var deselectItems = function(){
-        for (var i = 0; i < $scope.gcrudTable.tableParams.data.length; i++) {
+        for (var i = 0; i < $scope.gcrudpPrams.data.length; i++) {
             $scope.gcrudTable.tableParams.data[i].$selected = false;
         }
     };
@@ -79,7 +52,7 @@ angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$at
         $scope.$broadcast('event:createItem');
     };
 
-    $scope.selectItem = function(row, scrollItem) {
+    $scope.selectItem = function(row, scrollItem) {    
         $scope.selectedItem = row;
         deselectItems();
         row.$selected = true;
@@ -97,10 +70,9 @@ angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$at
         $scope.gcrudTable.tableParams.reload();
         $scope.gcrudTable.tableParams.cache = true;
     });
-
 }])
 ;
-angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$filter','gcrudOptions', function(ngTableParams, $filter, gcrudOptions) {
+angular.module('gcrud').controller('gcrudGridController', ['$scope','ngTableParams', '$filter','gcrudOptions', function($scope,ngTableParams, $filter, gcrudOptions) {
     
     var page     = $scope.gcrudParams.page || 1;
     var count    = $scope.gcrudParams.itemsPerPage || gcrudOptions.itemsPerPage;
@@ -110,45 +82,7 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
     var total    = $scope.gcrudParams.total || 0;
     var counts   = $scope.gcrudParams.counts || [];
     var cache    = $scope.gcrudParams.cache || true;
-    var getData  = $scope.gcrudParams || function($defer, params) {
-        var loadData = true;
-        $.each(params.filter(), function(index,value) {
-            if (angular.isDate(value)) {
-                params.filter()[index] = $filter('date')(value, 'yyyy-MM-dd');
-                loadData = true;
-            }
-            if (value ==='' || value === null) {
-                delete params.filter()[index];
-                loadData = false;
-            }
-        });
-
-        if(!!loadData){
-            apiCall.withHttpConfig({cache:params.cache}).getList(params.$params).then(function(data){
-                $defer.resolve(data);
-                params.total(data.total);
-
-                if(!!callback){
-                    callback(data);
-                }
-                //hide pagination if it not requied
-                if(params.total() <= count){
-                    $("table.ng-table").find("tfoot").remove();
-                }
-            });
-        }
-    };
-
-
-    $scope.$watch('tableParams.data', function(data){
-        if (!!data.total) {
-            $scope.selectItem(data[0], false);
-            delete $scope.emptyItemList;
-        } else {
-            delete $scope.selectedItem;
-            $scope.emptyItemList = true;
-        }
-    });
+    var getData  = $scope.gcrudParams.getData;     
 
     $scope.removeFilters = function() {
         this.tableParams.filter(angular.copy(filter));
@@ -161,7 +95,6 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
         defaultSortingOn = angular.equals(params.sorting, sorting);
         return !defaultFiltersOn || !defaultSortingOn;
     };
-
     $scope.tableParams = new ngTableParams({
         page: page, // show first page
         count: count, // count per page
@@ -171,9 +104,19 @@ angular.module('gcrud').controller('gcrudGridController', ['ngTableParams', '$fi
         total: total, // length of data
         // total: data.length, // length of data
         counts: counts,
-        getData: this.getData
+        getData: getData
     });
-
+console.log('tp',$scope.tableParams);
+    $scope.$watch('tableParams.data', function(data){ 
+        console.log(data);
+        if (!!data.total) {
+            $scope.selectItem(data[0], false);
+            delete $scope.emptyItemList;
+        } else {
+            delete $scope.selectedItem;
+            $scope.emptyItemList = true;
+        }
+    });
 }])
 ;
 angular.module('gcrud').controller('gcrudDetailController', ['$scope', '$element', '$attrs', '$transclude', function($scope, $element, $attrs, $transclude) {
@@ -222,4 +165,32 @@ angular.module('gcrud').controller('gcrudDetailController', ['$scope', '$element
         });
     };
 }])
+;
+angular.module('gcrud').directive('gcrud', function(){
+    return {
+        controller: 'gcrudController',
+        restrict: 'A'
+    };
+})
+;
+angular.module('gcrud').directive('gcrudGrid', function(){
+    return {
+        priority: 90,
+        restrict: 'E',
+        // templateUrl: '../templates/gcrud-grid-template.html',
+        template: '<p><button id="btn-reload" ng-show="showResetButton()" ng-click="removeFilters()" class="btn btn-default">Eliminar filtros</button></p>\n<div ng-transclude></div>\n<div ng-if="!!emptyItemList">\n<div class="alert alert-block alert-warning">\n<h4 class="alert-heading">No se han encontrado registros!</h4>\nElimina los filtros para poder visualizar la lista\n</div>\n</div>\n<form class="smart-form widget-body no-padding">\n<footer>\n<button type="button" class="btn btn-primary" ng-click="addItem()">\nAgregar\n</button>\n</footer>\n</form>',
+        controller: 'gcrudGridController',
+        transclude: true
+    };
+})
+;
+angular.module('gcrud').directive('gcrudDetail', function(){
+    return {
+        transclude: true,
+        // templateUrl: '../templates/gcrud-detail-template.html',
+        template: '<div ng-if="!!selectedItem">\n    <form class="smart-form" editable-form name="editableForm" onaftersave="saveItem()" ng-controller="gbuEditableFormController">\n        <div ng-transclude></div>\n\n        <footer>\n            <span ng-hide="editableForm.$visible">\n                <!-- button to show form -->\n                <button type="button" class="btn btn-sm btn-danger" ng-click="deleteItem(selectedItem)" >\n                    Borrar\n                </button>\n                <button type="button" class="btn btn-primary" ng-click="editableForm.$show()" >\n                    Editar\n                </button>\n            </span>\n            <!-- buttons to submit / cancel form -->\n            <span ng-show="editableForm.$visible">\n                <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="cancelItemEdit()">\n                    Cancelar\n                </button>\n                <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">\n                    Guardar\n                </button>\n            </span>\n        </footer>\n    </form>\n</div>\n<div ng-if="!!emptyItemList">\n    <div class="alert alert-block alert-warning">\n        <h4 class="alert-heading">No hay ningún servicio seleccionado!</h4>\n        Elimina los filtros del listado de servicios para poder visualizar el detalle.\n    </div>\n</div>',
+        controller: 'gcrudDetailController',
+        restrict: 'E'
+    };
+})
 ;

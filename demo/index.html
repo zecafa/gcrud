@@ -3,6 +3,7 @@
     <head>
         <script data-require="angular.js@*" data-semver="1.2.0-rc3-nonmin" src="http://code.angularjs.org/1.2.0-rc.3/angular.js"></script>
         <script data-require="ng-table@*" data-semver="0.3.0" src="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.js"></script>
+
         <link data-require="ng-table@*" data-semver="0.3.0" rel="stylesheet" href="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.css" />
         <link data-require="bootstrap-css@*" data-semver="3.0.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
 
@@ -16,32 +17,34 @@
                 <h1>Grid Create Update Delete</h1>
             </div>
             <div ng-controller="DemoCtrl">
-                <div gbu-crud="gbuCrudParams" >
+                <div gcrud="gcrudParams" >
                     <div class="col-md-6">
-                        <gbu:grid>
-                        <table ng-table="gcrud.tableParams" show-filter="true" class="table table-striped table-bordered table-hover dataTable no-footer">                        
-                            <tr ng-repeat="user in $data">
-                                <td data-title="'Name'">{{user.name}}</td>
-                                <td data-title="'Age'">{{user.age}}</td>
+                        <gcrud:grid>
+                        <table ng-table="tableParams" show-filter="true" class="table table-striped table-bordered table-hover dataTable no-footer">   
+                            <tbody>                     
+                            <tr ng-repeat="item in $data" ng-class="{'active': item.$selected}"  ng-click="selectItem(item, true)">
+                                <td data-title="'Name'" sortable="name">{{item.name}}</td>
+                                <td data-title="'Age'" sortable="age">{{item.age}}</td>
                             </tr>
+                            </tbody>
                         </table>
-                        </gbu:grid>
+                        </gcrud:grid>
                     </div>
                     <div class="col-md-6">                        
-                        <gbu:editable-form>
+                        <gcrud:detail>
                         <fieldset>
                             <div class="editable-row">
                                 <span class="label">Name: </span>
-                                <span editable-text="user.name" e-name="name" >{{user.name}}</span>
+                                <span editable-text="item.name" e-name="name" >{{item.name}}</span>
                             </div>
                             <div class="editable-row">
                                 <span class="label">Age: </span>
-                                <span editable-select="user.age" e-name="place" >
-                                {{user.age}}
+                                <span editable-select="item.age" e-name="place" >
+                                {{item.age}}
                                 </span>
                             </div>
                         </fieldset>
-                        </gbu:editable-form>
+                        </gcrud:detail>
                     </div>
                 </div>
             </div>
@@ -52,7 +55,9 @@
                 <p class="text-muted">GCRUD angular component by ZECA.</p>
             </div>
         </footer>
+        <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>     
         <script src="app.js"></script>
-        <script src="gcrud/gcrud.js"></script>        
+        <script src="gcrud/gcrud.js"></script>     
+
     </body>
 </html>

@@ -1,5 +1,5 @@
-var app = angular.module('main', ['ngTable']).
-controller('DemoCtrl', function($scope, ngTableParams) {
+var app = angular.module('main', ['gcrud']).
+controller('DemoCtrl', function($scope,$filter) {
     var data = [{name: "Moroni", age: 50},
                 {name: "Tiancum", age: 43},
                 {name: "Jacob", age: 27},
@@ -18,10 +18,15 @@ controller('DemoCtrl', function($scope, ngTableParams) {
                 {name: "Nephi", age: 29},
                 {name: "Enos", age: 34}];
 
-    $scope.gbuCrudParams = {       
+    $scope.gcrudParams = {       
         total: data.length, // length of data
+        defaultSorting: {'name':'asc'},
         getData: function($defer, params) {
-            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
+            // use build-in angular filter
+            var orderedData = params.sorting() ?
+                                $filter('orderBy')(data, params.orderBy()) :
+                                data;
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }        
     };
 });
