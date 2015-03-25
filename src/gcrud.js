@@ -54,8 +54,7 @@ angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$at
 
     $scope.selectItem = function(row, scrollItem) {    
         $scope.selectedItem = row;
-console.log(row);
-        // deselectItems();
+        deselectItems();
         row.$selected = true;
         if (scrollItem) {
             var oldLocation = $location.hash();
@@ -106,9 +105,10 @@ angular.module('gcrud').controller('gcrudGridController', ['$scope','ngTablePara
         counts: counts,
         getData: getData
     });
+    
 console.log('tp',$scope.tableParams);
     $scope.$watch('tableParams.data', function(data){ 
-        console.log(data);
+        console.log('data',data);
         if (!!data.total) {
             $scope.selectItem(data[0], false);
             delete $scope.emptyItemList;
@@ -180,7 +180,7 @@ angular.module('gcrud').directive('gcrudGrid', function(){
         // templateUrl: '../templates/gcrud-grid-template.html',
         template: '<p><button id="btn-reload" ng-show="showResetButton()" ng-click="removeFilters()" class="btn btn-default">Eliminar filtros</button></p><div ng-transclude></div><div ng-if="!!emptyItemList"> <div class="alert alert-block alert-warning"> <h4 class="alert-heading">No se han encontrado registros!</h4> Elimina los filtros para poder visualizar la lista </div></div><form class="smart-form widget-body no-padding"> <footer> <button type="button" class="btn btn-primary" ng-click="addItem()"> Agregar </button> </footer></form>',
         controller: 'gcrudGridController',
-        transclude: true
+        transclude: true   
     };
 })
 ;
@@ -188,9 +188,10 @@ angular.module('gcrud').directive('gcrudDetail', function(){
     return {
         transclude: true,
         // templateUrl: 'gcrud/gcrud-detail/templates/gcrud-detail-template.html',
-        template: '<div ng-if="!!selectedItem"> <form class="smart-form" editable-form name="editableForm" onaftersave="saveItem()" ng-controller="gcrudDetailController"> <div ng-transclude></div><footer> <span ng-hide="editableForm.$visible"> <button type="button" class="btn btn-sm btn-danger" ng-click="deleteItem(selectedItem)" > Borrar </button> <button type="button" class="btn btn-primary" ng-click="editableForm.$show()" > Editar </button> </span> <span ng-show="editableForm.$visible"> <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="cancelItemEdit()"> Cancelar </button> <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting"> Guardar </button> </span> </footer> </form></div><div ng-if="!!emptyItemList"> <div class="alert alert-block alert-warning"> <h4 class="alert-heading">No hay ningún servicio seleccionado!</h4> Elimina los filtros del listado de servicios para poder visualizar el detalle. </div></div>',
+        template: '<div ng-if="!!selectedItem"> <form class="smart-form" editable-form name="editableForm" onaftersave="saveItem()" ng-controller="gcrudDetailController"> <div ng-transclude></div><footer> <span ng-hide="editableForm.$visible"> <button type="button" class="btn btn-primary btn-danger" ng-click="deleteItem(selectedItem)" > Borrar </button> <button type="button" class="btn btn-primary" ng-click="editableForm.$show()" > Editar </button> </span> <span ng-show="editableForm.$visible"> <button type="button" class="btn btn-primary" ng-disabled="editableForm.$waiting" ng-click="cancelItemEdit()"> Cancelar </button> <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting"> Guardar </button> </span> </footer> </form></div><div ng-if="!!emptyItemList"> <div class="alert alert-block alert-warning"> <h4 class="alert-heading">No hay ningún servicio seleccionado!</h4> Elimina los filtros del listado de servicios para poder visualizar el detalle. </div></div>',
         controller: 'gcrudDetailController',
         restrict: 'E'
     };
 })
 ;
+

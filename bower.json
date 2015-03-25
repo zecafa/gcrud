@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "restangular": "~1.4.0",
-    "ng-table": "~0.5.4",
+    "ng-table": "0.5.4",
     "x-editable": "~1.5.1"
   }
 }

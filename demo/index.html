@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script data-require="angular.js@*" data-semver="1.2.0-rc3-nonmin" src="http://code.angularjs.org/1.2.0-rc.3/angular.js"></script>
-        <script data-require="ng-table@*" data-semver="0.3.0" src="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.js"></script>
-
+    <head>        
         <link data-require="ng-table@*" data-semver="0.3.0" rel="stylesheet" href="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.css" />
         <link data-require="bootstrap-css@*" data-semver="3.0.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
 
@@ -39,16 +36,14 @@
                             <div class="panel-body">
                                 <gcrud:detail>
                                 <fieldset>
-                                    <div class="editable-row">
-                                        <span class="label">Name: </span>
-                                        <span editable-text="selectedItem.name" e-name="name" >{{selectedItem.name}}</span>
-                                    </div>
-                                    <div class="editable-row">
-                                        <span class="label">Age: </span>
-                                        <span editable-select="selectedItem.age" e-name="place" >
+                                    <dl class="dl-horizontal editable-row">
+                                        <dt>Name: </dt>
+                                        <dd editable-text="selectedItem.name" e-name="name" >{{selectedItem.name}}</dd>
+                                        <dt>Age: </dt>
+                                        <dd editable-select="selectedItem.age" e-name="place" >
                                         {{selectedItem.age}}
-                                        </span>
-                                    </div>
+                                        </dd>
+                                    </dl>
                                 </fieldset>
                                 </gcrud:detail>
                             </div>
@@ -63,7 +58,10 @@
                 <p class="text-muted">GCRUD angular component by ZECA.</p>
             </div>
         </footer>
+        <!-- // <script data-require="angular.js@*" data-semver="1.2.0-rc3-nonmin" src="http://code.angularjs.org/1.2.0-rc.3/angular.js"></script>         -->
+        <script src="bower_components/angular/angular.js"></script>     
         <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>     
+        <script src="bower_components/ng-table/dist/ng-table.js"></script>     
         <script src="app.js"></script>
         <script src="gcrud/gcrud.js"></script>     
 
