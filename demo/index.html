@@ -17,34 +17,42 @@
                 <h1>Grid Create Update Delete</h1>
             </div>
             <div ng-controller="DemoCtrl">
-                <div gcrud="gcrudParams" >
+                <div gcrud="gcrudParams" class="row">
                     <div class="col-md-6">
-                        <gcrud:grid>
-                        <table ng-table="tableParams" show-filter="true" class="table table-striped table-bordered table-hover dataTable no-footer">   
-                            <tbody>                     
-                            <tr ng-repeat="item in $data" ng-class="{'active': item.$selected}"  ng-click="selectItem(item, true)">
-                                <td data-title="'Name'" sortable="name">{{item.name}}</td>
-                                <td data-title="'Age'" sortable="age">{{item.age}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        </gcrud:grid>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <gcrud:grid>
+                                <table ng-table="tableParams" show-filter="true" class="table table-striped table-bordered table-hover dataTable no-footer">   
+                                    <tbody>                     
+                                    <tr ng-repeat="item in $data" ng-class="{'active': item.$selected}"  ng-click="selectItem(item, true)">
+                                        <td data-title="'Name'" sortable="name">{{item.name}}</td>
+                                        <td data-title="'Age'" sortable="age">{{item.age}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </gcrud:grid>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">                        
-                        <gcrud:detail>
-                        <fieldset>
-                            <div class="editable-row">
-                                <span class="label">Name: </span>
-                                <span editable-text="selectedItem.name" e-name="name" >{{selectedItem.name}}</span>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <gcrud:detail>
+                                <fieldset>
+                                    <div class="editable-row">
+                                        <span class="label">Name: </span>
+                                        <span editable-text="selectedItem.name" e-name="name" >{{selectedItem.name}}</span>
+                                    </div>
+                                    <div class="editable-row">
+                                        <span class="label">Age: </span>
+                                        <span editable-select="selectedItem.age" e-name="place" >
+                                        {{selectedItem.age}}
+                                        </span>
+                                    </div>
+                                </fieldset>
+                                </gcrud:detail>
                             </div>
-                            <div class="editable-row">
-                                <span class="label">Age: </span>
-                                <span editable-select="selectedItem.age" e-name="place" >
-                                {{selectedItem.age}}
-                                </span>
-                            </div>
-                        </fieldset>
-                        </gcrud:detail>
+                        </div>                                        
                     </div>
                 </div>
             </div>
