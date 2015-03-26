@@ -18,17 +18,19 @@ controller('DemoCtrl', function($scope,$filter) {
                 {name: "Nephi", age: 29},
                 {name: "Enos", age: 34}];
 
+    var getData = function($defer, params) {
+        // use build-in angular filter
+        var orderedData = params.sorting() ?
+                            $filter('orderBy')(data, params.orderBy()) :
+                            data;
+        responseData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params. count())  
+        responseData.total = this.total;     
+        $defer.resolve(responseData);
+    };
+
     $scope.gcrudParams = {       
         total: data.length, // length of data
         defaultSorting: {'name':'asc'},
-        getData: function($defer, params) {
-            // use build-in angular filter
-            var orderedData = params.sorting() ?
-                                $filter('orderBy')(data, params.orderBy()) :
-                                data;
-            responseData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params. count())  
-            responseData.total = this.total;     
-            $defer.resolve(responseData);
-        }        
+        getData: getData  
     };
 });
