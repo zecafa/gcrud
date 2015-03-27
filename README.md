@@ -9,7 +9,6 @@ Grid Create Read Update Delete
 TODO
 
 ## Installation
-TODO
 ````
 bower install git@github.com:zecafa/gcrud.git
 ````
