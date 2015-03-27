@@ -14,7 +14,6 @@ bower install git@github.com:zecafa/gcrud.git
 ````
 
 ## Dependencies
-* [Restangular](https://github.com/mgonto/restangular)
 * [x-editable](https://github.com/vitalets/angular-xeditable)
 * [ng-table](https://github.com/esvit/ng-table)
 
