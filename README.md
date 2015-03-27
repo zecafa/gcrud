@@ -11,7 +11,7 @@ TODO
 ## Installation
 TODO
 ````
-bower install gcrud
+bower install git@github.com:zecafa/gcrud.git
 ````
 
 ## Dependencies
@@ -20,7 +20,7 @@ bower install gcrud
 * [ng-table](https://github.com/esvit/ng-table)
 
 ## Plunker
-TODO
+http://plnkr.co/edit/ug56FyhWIBiy07TaSBjX?p=preview
 
 ## License
 MIT
