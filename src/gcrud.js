@@ -1,4 +1,4 @@
-var gcrud = angular.module('gcrud',['ngTable'])
+var gcrud = angular.module('gcrud',['ngTable','xeditable'])
 
 /**
  * Default options. 

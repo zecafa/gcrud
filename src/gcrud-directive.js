@@ -1,9 +1,9 @@
 
-angular.module('gcrud').controller('gcrudController',['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll', function($scope, $element, $attrs, $transclude, $location, $anchorScroll){
+angular.module('gcrud').controller('gcrudController', ['$scope', '$element', '$attrs', '$transclude', '$location', '$anchorScroll', function($scope, $element, $attrs, $transclude, $location, $anchorScroll){
     var deselectItems = function(){
-        for (var i = 0; i < $scope.tableParams.data.length; i++) {
-            $scope.tableParams.data[i].$selected = false;
-        }
+        _.each($scope.tableParams.data, function(item){
+            item.$selected = false;
+        });
     };
 
     $scope.addItem = function() {
