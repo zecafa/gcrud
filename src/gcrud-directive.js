@@ -1,35 +1,27 @@
-
-angular.module('gcrud').controller('gcrudController', ['$scope', '$location', '$anchorScroll', function ($scope, $location, $anchorScroll) {
-    var deselectItems = function () {
+angular.module('gcrud').controller('gcrudController', ['$scope', function ($scope) {
+    this.deselectItems = function () {
         _.each($scope.tableParams.data, function (item) {
             item.$selected = false;
         });
     };
 
-    $scope.addItem = function () {
+    this.addItem = function () {
         $scope.selectedItem = {};
-        deselectItems();
+        this.deselectItems();
         delete $scope.emptyItemList;
         $scope.$broadcast('event:createItem');
     };
 
-    $scope.selectItem = function (row, scrollItem) {
-        $scope.selectedItem = row;
-        deselectItems();
-        row.$selected = true;
-        if (scrollItem) {
-            var oldLocation = $location.hash();
-            $location.hash('rowoverview');
-            $anchorScroll();
-            $location.hash(oldLocation);
-        }
+    this.setActiveItem = function (item) {
+        $scope.activeItem = item || {};
+        console.log($scope.activeItem);
     };
 
-    $scope.$on('event:refreshTable', function () {
-        $scope.tableParams.cache = false;
-        $scope.tableParams.reload();
-        $scope.tableParams.cache = true;
-    });
+    this.getActiveItem = function () {
+        return $scope.activeItem || {};
+    };
+
+    return this;
 }]);
 angular.module('gcrud').directive('gcrud', function () {
     return {

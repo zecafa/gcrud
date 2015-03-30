@@ -2,20 +2,15 @@ angular.module('gcrud').directive('gcrudDetail', function(){
     return {
         transclude: true,
         // templateUrl: 'gcrud/gcrud-detail/templates/gcrud-detail-template.html',
-        scope: {
-            'activeItem': '='
-        },
-        require: '^gcrudGrid', 
-        template: '<div ng-if="!!activeItem"> <form class="smart-form" editable-form name="editableForm" onaftersave="saveItem()" ng-controller="gcrudDetailController"> <div ng-transclude></div><footer> <span ng-hide="editableForm.$visible"> <button type="button" class="btn btn-primary btn-danger" ng-click="deleteItem(activeItem)" > Borrar </button> <button type="button" class="btn btn-primary" ng-click="editableForm.$show()" > Editar </button> </span> <span ng-show="editableForm.$visible"> <button type="button" class="btn btn-primary" ng-disabled="editableForm.$waiting" ng-click="cancelItemEdit()"> Cancelar </button> <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting"> Guardar </button> </span> </footer> </form></div><div ng-if="!!emptyItemList"> <div class="alert alert-block alert-warning"> <h4 class="alert-heading">No hay ningún servicio seleccionado!</h4> Elimina los filtros del listado de servicios para poder visualizar el detalle. </div></div>',
-        controller: 'gcrudDetailController',
+        require: '^gcrud', 
+        template: '<div ng-if="!!activeItem"> <form class="smart-form" editable-form name="editableForm" onaftersave="saveItem()" > <div ng-transclude></div><footer> <span ng-hide="editableForm.$visible"> <button type="button" class="btn btn-primary btn-danger" ng-click="deleteItem(activeItem)" > Borrar </button> <button type="button" class="btn btn-primary" ng-click="editableForm.$show()" > Editar </button> </span> <span ng-show="editableForm.$visible"> <button type="button" class="btn btn-primary" ng-disabled="editableForm.$waiting" ng-click="cancelItemEdit()"> Cancelar </button> <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting"> Guardar </button> </span> </footer> </form></div><div ng-if="!!emptyItemList"> <div class="alert alert-block alert-warning"> <h4 class="alert-heading">No hay ningún servicio seleccionado!</h4> Elimina los filtros del listado de servicios para poder visualizar el detalle. </div></div>',
         restrict: 'E',
-        link: function($scope, iElm, iAttrs, gcrudGridCtrl) {
-
+        link: function($scope, iElm, iAttrs, gcrudCtrl) {
             $scope.cancelItemEdit = function() {
                  if(!!$scope.activeItem && !$scope.activeItem.id){
                     $scope.$emit('event:refreshTable');
                 }
-                $scope.editableForm.$cancel();
+                   $scope.editableForm.$cancel();
             };
 
             $scope.saveItem = function() {
@@ -24,7 +19,7 @@ angular.module('gcrud').directive('gcrudDetail', function(){
                     alert('error');
                 };
 
-                if (!$scope.activeItem.id) {
+                if (!$scope.activeItem) {
                     var newItem = Restangular.copy($scope.activeItem);
                     baseItem = Restangular.all($scope.GcrudParams.apiResourceName).post(newItem);
                 }

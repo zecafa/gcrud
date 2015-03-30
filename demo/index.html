@@ -21,7 +21,7 @@
                                 <gcrud:grid>
                                 <table ng-table="tableParams" show-filter="true" class="table table-striped table-bordered table-hover dataTable no-footer">   
                                     <tbody>                     
-                                    <tr ng-repeat="item in $data" ng-class="{'active': item.$selected}"  ng-click="selectItem(item, true)">
+                                    <tr ng-repeat="item in $data" ng-class="{'active': item.$selected}"  ng-click="selectItem(item)">
                                         <td data-title="'Name'" sortable="name">{{item.name}}</td>
                                         <td data-title="'Age'" sortable="age">{{item.age}}</td>
                                     </tr>
@@ -38,10 +38,10 @@
                                 <fieldset>
                                     <dl class="dl-horizontal editable-row">
                                         <dt>Name: </dt>
-                                        <dd editable-text="selectedItem.name" e-name="name" >{{selectedItem.name}}</dd>
+                                        <dd editable-text="activeItem.name" e-name="name" >{{activeItem.name}}</dd>
                                         <dt>Age: </dt>
-                                        <dd editable-select="selectedItem.age" e-name="place" >
-                                        {{selectedItem.age}}
+                                        <dd editable-text="activeItem.age" e-name="age" >
+                                        {{activeItem.age}}
                                         </dd>
                                     </dl>
                                 </fieldset>
